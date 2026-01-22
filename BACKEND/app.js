@@ -8,6 +8,7 @@ import messageRouter from './router/messageRouter.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import userRouter from "./router/userRouter.js";
 import appointmentRouter from "./router/appointmentRouter.js";
+import logger from './utils/logger.js';
 
 const app = express();
 config({ path: './config/config.env'});
@@ -29,6 +30,16 @@ app.use(fileUpload({
     tempFileDir: '/tmp/',
     createParentPath: true,
 }));
+
+// Add this middleware early in your app
+app.use((req, res, next) => {
+    logger.info(`${req.method} ${req.path}`);
+    next();
+});
+
+app.get('/api/v1/check', (req, res) => {
+    res.status(200).json({ message: 'Backend is running successfully!' });
+});
 
 app.use('/api/v1/message', messageRouter);
 app.use("/api/v1/user", userRouter);

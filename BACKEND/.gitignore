@@ -47,3 +47,4 @@ jspm_packages/
 
 # Optional: Ignore system files
 *~
+config.env
